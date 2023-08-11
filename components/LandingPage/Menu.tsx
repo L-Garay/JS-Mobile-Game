@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import { Link } from 'expo-router';
 
 // type MenuProps = {};
 
@@ -19,9 +20,9 @@ const styles = StyleSheet.create({
 const Menu = () => {
   return (
     <View style={styles.container}>
-      <Text>New Game</Text>
-      <Text>Load Game</Text>
-      <Text>Options</Text>
+      <Link href="/new-game/">New Game</Link>
+      <Link href="/load-game/">Load Game</Link>
+      <Link href="/setttings/">Options</Link>
     </View>
   );
 };
