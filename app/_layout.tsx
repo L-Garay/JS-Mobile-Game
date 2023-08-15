@@ -4,6 +4,7 @@ import {
   DefaultTheme,
   ThemeProvider
 } from '@react-navigation/native';
+import { OrientationProvider } from '../contexts/OrientationContext';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
@@ -46,7 +47,9 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>{/* <Stack.Screen name="LandingPage" /> */}</Stack>
+      <OrientationProvider>
+        <Stack>{/* <Stack.Screen name="LandingPage" /> */}</Stack>
+      </OrientationProvider>
     </ThemeProvider>
   );
 }

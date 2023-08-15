@@ -1,9 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, View, Animated } from 'react-native';
+import { StyleSheet, Animated } from 'react-native';
 import { Cloud, CloudReversed } from '../assets/svgs';
 import SimpleButton from '../components/Buttons/SimpleButton';
 import Menu from '../components/LandingPage/Menu';
+import useOrientationContext from '../contexts/OrientationContext';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,11 +26,15 @@ const styles = StyleSheet.create({
 const DURATION = 2500;
 const DELAY = 1500;
 
-// NOTE recreate entire project so Expo Router is already installed and configured
-
 const LandingPage = (): JSX.Element => {
   const [showMenu, setShowMenu] = React.useState<boolean>(false);
   const [renderMenu, setRenderMenu] = React.useState<boolean>(false);
+
+  const { isLandscape, dimensions, setOrientation } = useOrientationContext();
+
+  useEffect(() => {
+    setOrientation(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+  }, []);
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const translateXLeft = useRef(new Animated.Value(0)).current;

@@ -16,18 +16,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "requireFullScreen": true,
-      "UISupportedInterfaceOrientations": [
-        "UIInterfaceOrientationLandscapeRight",
-        "UIInterfaceOrientationLandscapeLeft",
-        "UIInterfaceOrientationPortrait"
-      ],
-      "UISupportedInterfaceOrientations~ipad": [
-        "UIInterfaceOrientationLandscapeRight",
-        "UIInterfaceOrientationLandscapeLeft",
-        "UIDeviceOrientationPortrait",
-        "UIDeviceOrientationPortraitUpsideDown"
-      ]
+      "requireFullScreen": true
     },
     "android": {
       "adaptiveIcon": {
@@ -42,7 +31,7 @@
     },
     "plugins": [
       "expo-router",
-      ["expo-screen-orientation", {"initialOrientation": "PORTRAIT_UP"}]
+      "expo-screen-orientation"
     ],
     "experiments": {
       "typedRoutes": true
