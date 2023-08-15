@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 });
 
 const DURATION = 2500;
-const DELAY = 1500;
+const DELAY = 1000;
 
 const LandingPage = (): JSX.Element => {
   const [showMenu, setShowMenu] = React.useState<boolean>(false);

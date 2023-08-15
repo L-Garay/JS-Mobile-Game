@@ -1,4 +1,4 @@
-import { Link, Stack } from 'expo-router';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,6 +15,7 @@ import {
 } from 'react-hook-form';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Ghost, Mummy, Vampire, Zombie } from '../../assets/svgs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type CreateInputs = {
   name: string;
@@ -32,7 +33,8 @@ const COLOR_OPTIONS = [
   { key: '7', value: 'Pink' }
 ];
 
-export default function NotFoundScreen() {
+export default function LandingPage() {
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const defaultValues = {
     name: '',
     color: '',
@@ -47,11 +49,25 @@ export default function NotFoundScreen() {
   } = useForm({
     defaultValues
   });
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+
+  const onSubmit = async (data: FieldValues) => {
+    // TODO check for any errors
+    if (errors.root) {
+      console.log('ERRORS', errors);
+      // NOTE what to do here? RHF should handle errors
+      return;
+    }
+    try {
+      const stringifiedData = JSON.stringify(data);
+      await AsyncStorage.setItem(`character_${data.name}`, stringifiedData);
+      // TODO add redirection to 'main screen' or 'game screen'
+    } catch (error) {
+      console.error(error);
+      // TODO display a message to the user
+    }
   };
 
-  console.log(watch('name'), watch('color'), watch('icon'));
+  // console.log(watch('name'), watch('color'), watch('icon'));
 
   return (
     <View style={styles.container}>
