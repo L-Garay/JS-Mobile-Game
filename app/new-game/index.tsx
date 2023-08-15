@@ -39,7 +39,7 @@ export default function LandingPage() {
     name: '',
     color: '',
     icon: ''
-  } as FieldValues;
+  } as CreateInputs as FieldValues;
   const {
     register,
     control,
