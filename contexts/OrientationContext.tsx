@@ -26,12 +26,16 @@ export const OrientationProvider = ({ children }: { children: ReactNode }) => {
     width: 0,
     height: 0
   });
-  const data = useWindowDimensions();
+
+  const windowDimensions = useWindowDimensions();
 
   useEffect(() => {
-    setIsLandscape(data.width > data.height);
-    setDimensions({ width: data.width, height: data.height });
-  }, [data]);
+    setIsLandscape(windowDimensions.width > windowDimensions.height);
+    setDimensions({
+      width: windowDimensions.width,
+      height: windowDimensions.height
+    });
+  }, [windowDimensions]);
 
   const setOrientation = async (
     orientation: ScreenOrientation.OrientationLock

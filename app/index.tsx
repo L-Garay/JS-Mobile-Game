@@ -14,12 +14,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#84daf2',
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  text: {
-    color: '#fff',
-    textShadowColor: '#000',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 1
   }
 });
 
