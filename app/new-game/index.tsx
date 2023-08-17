@@ -7,6 +7,7 @@ import {
   Pressable,
   Button
 } from 'react-native';
+import { useNavigation } from 'expo-router';
 import {
   useForm,
   SubmitHandler,
@@ -24,17 +25,18 @@ type CreateInputs = {
 };
 
 const COLOR_OPTIONS = [
-  { key: '1', value: 'Red' },
-  { key: '2', value: 'Blue' },
-  { key: '3', value: 'Green' },
-  { key: '4', value: 'Orange' },
-  { key: '5', value: 'Purple' },
-  { key: '6', value: 'Yellow' },
-  { key: '7', value: 'Pink' }
+  { key: 'red', value: 'Red' },
+  { key: 'blue', value: 'Blue' },
+  { key: 'green', value: 'Green' },
+  { key: 'orange', value: 'Orange' },
+  { key: 'purple', value: 'Purple' },
+  { key: 'yellow', value: 'Yellow' },
+  { key: 'pink', value: 'Pink' }
 ];
 
 export default function LandingPage() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const navigation = useNavigation();
   const defaultValues = {
     name: '',
     color: '',
@@ -60,7 +62,9 @@ export default function LandingPage() {
     try {
       const stringifiedData = JSON.stringify(data);
       await AsyncStorage.setItem(`character_${data.name}`, stringifiedData);
-      // TODO add redirection to 'main screen' or 'game screen'
+      navigation.navigate('game-center/index', {
+        character: `character_${data.name}`
+      });
     } catch (error) {
       console.error(error);
       // TODO display a message to the user
@@ -135,7 +139,7 @@ export default function LandingPage() {
                 <SelectList
                   setSelected={onChange}
                   data={COLOR_OPTIONS}
-                  save="value"
+                  save="key"
                   placeholder="Select your color"
                   search={false}
                 />
@@ -145,6 +149,15 @@ export default function LandingPage() {
           </View>
         </View>
         <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+        {/* NOTE testing purposes only */}
+        <Button
+          title="Test"
+          onPress={() =>
+            navigation.navigate('game-center/index', {
+              character: 'test-character-name'
+            })
+          }
+        />
       </View>
     </View>
   );
