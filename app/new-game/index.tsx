@@ -34,7 +34,7 @@ const COLOR_OPTIONS = [
   { key: 'pink', value: 'Pink' }
 ];
 
-export default function LandingPage() {
+export default function NewGame() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const navigation = useNavigation();
   const defaultValues = {
