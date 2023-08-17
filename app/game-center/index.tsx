@@ -7,7 +7,7 @@ import {
   Pressable,
   Button
 } from 'react-native';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Character } from '../../constants/Character';
 import { SettingsWheel } from '../../assets/svgs';
@@ -56,6 +56,9 @@ export default function GameCenter() {
         }}
       />
       <View>
+        {/* NOTE testing purposes only */}
+        <Link href="/">Back</Link>
+        {/* TODO More than likely will need to open a modal */}
         <SettingsWheel />
       </View>
       <Text style={styles.title}>Game Center</Text>
