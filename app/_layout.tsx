@@ -48,7 +48,10 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <OrientationProvider>
-        <Stack>{/* <Stack.Screen name="LandingPage" /> */}</Stack>
+        <Stack>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="game-center/index" />
+        </Stack>
       </OrientationProvider>
     </ThemeProvider>
   );
