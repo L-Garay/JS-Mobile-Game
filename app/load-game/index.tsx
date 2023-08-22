@@ -21,7 +21,7 @@ export default function LoadGame() {
   const [deletionError, setDeletionError] = useState<any>(null);
 
   useEffect(() => {
-    const getCharacterKeys = async () => {
+    const getCharacters = async () => {
       AsyncStorage.getAllKeys().then(keys => {
         console.log('KEYS', keys);
         const keyCopies = [...keys];
@@ -36,7 +36,7 @@ export default function LoadGame() {
         });
       });
     };
-    getCharacterKeys();
+    getCharacters();
   }, []);
 
   console.log('characters', characters);

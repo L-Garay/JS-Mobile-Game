@@ -17,6 +17,7 @@ export default function GameCenter() {
   const [characterData, setCharacterData] = useState<Character>(
     {} as Character
   );
+
   // NOTE typed as 'any' for now until figure out what structure it should be
   const [characterError, setCharacterError] = useState<any>(null);
 
@@ -38,7 +39,9 @@ export default function GameCenter() {
     };
     getCharacterData();
   }, [character]);
+
   console.log('characterData', characterData);
+
   return (
     <View style={styles.container}>
       <Stack.Screen

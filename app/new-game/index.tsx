@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,15 +7,11 @@ import {
   Pressable,
   Button,
   Keyboard,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
 import { useNavigation } from 'expo-router';
-import {
-  useForm,
-  SubmitHandler,
-  Controller,
-  FieldValues
-} from 'react-hook-form';
+import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Ghost, Mummy, Vampire, Zombie, PinDoll } from '../../assets/svgs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -63,11 +59,23 @@ export default function NewGame() {
     defaultValues
   });
 
+  const SubmitionErrorAlert = (data: FieldValues, error: any) => {
+    Alert.alert(
+      'Error creating character',
+      `There was a problem creating ${data.name}. Please try again, and if problem persists contact support.`,
+      [
+        {
+          text: 'OK',
+          onPress: () => console.log('OK Pressed'),
+          style: 'default'
+        }
+      ]
+    );
+  };
+
   const onSubmit = async (data: FieldValues) => {
-    // TODO check for any errors
     if (errors.root) {
       console.log('ERRORS', errors);
-      // NOTE what to do here? RHF should handle errors
       return;
     }
     try {
@@ -78,7 +86,7 @@ export default function NewGame() {
       });
     } catch (error) {
       console.error(error);
-      // TODO display a message to the user
+      SubmitionErrorAlert(data, error);
     }
   };
 
@@ -113,7 +121,6 @@ export default function NewGame() {
         </View>
         <View style={styles.iconContainer}>
           <Text>Icon: </Text>
-          {/* TODO change this regular View into a ScrollView to allow adding more icons and scrolling */}
           <ScrollView style={styles.iconInput} horizontal>
             <Controller
               control={control}
@@ -141,8 +148,8 @@ export default function NewGame() {
                           backgroundColor:
                             selectedIcon === icon.key
                               ? 'rgb(64, 207, 247)'
-                              : 'transparent'
-                          // paddingRight: 5,
+                              : 'transparent',
+                          paddingRight: 5
                         }}
                       >
                         {icon.value}
@@ -154,6 +161,7 @@ export default function NewGame() {
               name="icon"
             />
           </ScrollView>
+          {errors.icon && <Text>This is required.</Text>}
         </View>
         <View style={styles.colorContainer}>
           <Text>Color: </Text>
@@ -170,13 +178,22 @@ export default function NewGame() {
                   save="key"
                   placeholder="Select your color"
                   search={false}
+                  boxStyles={{ zIndex: 2 }}
                 />
               )}
               name="color"
             />
           </View>
+          {errors.color && <Text>This is required.</Text>}
         </View>
-        <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+        <View style={styles.submitContainer}>
+          <Pressable
+            style={styles.submitButton}
+            onPress={handleSubmit(onSubmit)}
+          >
+            <Text style={styles.submitLabel}>Submit</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   );
@@ -197,14 +214,16 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderColor: '#d18408',
     backgroundColor: '#d6a811',
-    padding: 10
+    padding: 10,
+    position: 'relative'
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#2e78b7',
     alignSelf: 'center',
-    paddingBottom: 10
+    paddingTop: 10,
+    paddingBottom: 30
   },
   nameContainer: {
     backgroundColor: 'lightgreen'
@@ -220,10 +239,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightblue'
   },
   colorLabel: {},
-  colorInput: { borderWidth: 1, borderColor: '#000', backgroundColor: '#fff' },
+  colorInput: {
+    borderWidth: 1,
+    borderColor: '#000',
+    backgroundColor: '#fff'
+  },
   iconContainer: {
-    backgroundColor: 'lightyellow',
-    flex: 1
+    backgroundColor: 'lightyellow'
   },
   iconLabel: {},
   iconInput: {
@@ -231,5 +253,28 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     backgroundColor: '#fff',
     flexDirection: 'row'
+  },
+  submitContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: '7.5%',
+    left: '28.5%',
+    zIndex: -1
+  },
+  submitButton: {
+    height: 50,
+    width: 130,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#84daf2',
+    borderColor: '#2e78b7',
+    borderWidth: 3
+  },
+  submitLabel: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2e78b7'
   }
 });
