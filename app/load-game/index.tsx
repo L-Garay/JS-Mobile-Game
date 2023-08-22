@@ -6,15 +6,19 @@ import {
   TextInput,
   Pressable,
   Button,
-  FlatList
+  FlatList,
+  Alert
 } from 'react-native';
 import { useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Character } from '../../constants/Character';
+import { Trash } from '../../assets/svgs';
 
 export default function LoadGame() {
   const navigation = useNavigation();
   const [characters, setCharacters] = useState<Character[]>([]);
+  // TODO probably want to create universal error parser/handler/types
+  const [deletionError, setDeletionError] = useState<any>(null);
 
   useEffect(() => {
     const getCharacterKeys = async () => {
@@ -37,23 +41,79 @@ export default function LoadGame() {
 
   console.log('characters', characters);
 
+  const DeleteConfirmationAlert = (character: Character) => {
+    Alert.alert(
+      'Delete Character',
+      `Are you sure you want to delete ${character.name}? This cannot be undone.`,
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        },
+        {
+          text: 'Delete',
+          onPress: () => {
+            try {
+              AsyncStorage.removeItem(`character_${character.name}`);
+              setCharacters(
+                characters.filter(char => char.name !== character.name)
+              );
+            } catch (error) {
+              setDeletionError(error);
+            }
+          },
+          style: 'destructive'
+        }
+      ]
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.menu}>
         <Text style={styles.title}>Load a character!</Text>
         <FlatList
           data={characters}
-          renderItem={({ item }) => (
-            <Pressable
-              onPress={() =>
-                navigation.navigate('game-center/index', {
-                  character: `character_${item.name}`
-                })
-              }
-            >
-              <Text>{item.name}</Text>
-            </Pressable>
-          )}
+          renderItem={({ item, index }) => {
+            // NOTE this is a hacky way to add padding to the first item in the list
+            // LOL I didn't even type 'hacky', that was CoPilot calling me out I guess
+            if (index === 0) {
+              return (
+                <View style={{ ...styles.itemContainer, paddingTop: 10 }}>
+                  <Pressable
+                    onPress={() =>
+                      navigation.navigate('game-center/index', {
+                        character: `character_${item.name}`
+                      })
+                    }
+                  >
+                    <Text style={styles.item}>{item.name}</Text>
+                  </Pressable>
+                  <Pressable onPress={() => DeleteConfirmationAlert(item)}>
+                    <Trash />
+                  </Pressable>
+                </View>
+              );
+            } else {
+              return (
+                <View style={styles.itemContainer}>
+                  <Pressable
+                    onPress={() =>
+                      navigation.navigate('game-center/index', {
+                        character: `character_${item.name}`
+                      })
+                    }
+                  >
+                    <Text style={styles.item}>{item.name}</Text>
+                  </Pressable>
+                  <Pressable onPress={() => DeleteConfirmationAlert(item)}>
+                    <Trash />
+                  </Pressable>
+                </View>
+              );
+            }
+          }}
           keyExtractor={item => item.name}
         />
       </View>
@@ -83,5 +143,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#2e78b7',
     alignSelf: 'center'
+  },
+  itemContainer: {
+    paddingBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  item: {
+    fontSize: 16
   }
 });

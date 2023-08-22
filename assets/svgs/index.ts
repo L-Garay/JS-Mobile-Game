@@ -5,3 +5,4 @@ export { default as Ghost } from './Ghost';
 export { default as Vampire } from './Vampire';
 export { default as Mummy } from './Mummy';
 export { default as SettingsWheel } from './SettingsWheel';
+export { default as Trash } from './Trash';
