@@ -5,7 +5,8 @@ import {
   View,
   TextInput,
   Pressable,
-  Button
+  Button,
+  Keyboard
 } from 'react-native';
 import { useNavigation } from 'expo-router';
 import {
@@ -34,8 +35,16 @@ const COLOR_OPTIONS = [
   { key: 'pink', value: 'Pink' }
 ];
 
+const ICONS = [
+  { key: 'zombie', value: <Zombie /> },
+  { key: 'ghost', value: <Ghost /> },
+  { key: 'vampire', value: <Vampire /> },
+  { key: 'mummy', value: <Mummy /> }
+];
+
 export default function NewGame() {
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+  const [selectedIcon, setSelectedIcon] = useState<string>('');
   const navigation = useNavigation();
   const defaultValues = {
     name: '',
@@ -101,6 +110,7 @@ export default function NewGame() {
         </View>
         <View style={styles.iconContainer}>
           <Text>Icon: </Text>
+          {/* TODO change this regular View into a ScrollView to allow adding more icons and scrolling */}
           <View style={styles.iconInput}>
             <Controller
               control={control}
@@ -109,18 +119,33 @@ export default function NewGame() {
               }}
               render={({ field: { onChange } }) => (
                 <>
-                  <Pressable onPress={() => onChange('zombie')}>
-                    <Zombie />
-                  </Pressable>
-                  <Pressable onPress={() => onChange('ghost')}>
-                    <Ghost />
-                  </Pressable>
-                  <Pressable onPress={() => onChange('vampire')}>
-                    <Vampire />
-                  </Pressable>
-                  <Pressable onPress={() => onChange('mummy')}>
-                    <Mummy />
-                  </Pressable>
+                  {ICONS.map(icon => {
+                    return (
+                      <Pressable
+                        key={icon.key}
+                        onPress={() => {
+                          Keyboard.dismiss();
+                          onChange(icon.key);
+                          setSelectedIcon(icon.key);
+                        }}
+                        style={{
+                          paddingTop: 15,
+                          paddingBottom: 15,
+                          paddingLeft: 5,
+                          borderColor:
+                            selectedIcon === icon.key ? '#000' : 'none',
+                          borderWidth: selectedIcon === icon.key ? 2 : 0,
+                          backgroundColor:
+                            selectedIcon === icon.key
+                              ? 'rgb(64, 207, 247)'
+                              : 'transparent'
+                          // paddingRight: 5,
+                        }}
+                      >
+                        {icon.value}
+                      </Pressable>
+                    );
+                  })}
                 </>
               )}
               name="icon"
@@ -149,15 +174,6 @@ export default function NewGame() {
           </View>
         </View>
         <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-        {/* NOTE testing purposes only */}
-        <Button
-          title="Test"
-          onPress={() =>
-            navigation.navigate('game-center/index', {
-              character: 'test-character-name'
-            })
-          }
-        />
       </View>
     </View>
   );
