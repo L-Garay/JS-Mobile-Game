@@ -6,7 +6,8 @@ import {
   TextInput,
   Pressable,
   Button,
-  Keyboard
+  Keyboard,
+  ScrollView
 } from 'react-native';
 import { useNavigation } from 'expo-router';
 import {
@@ -16,7 +17,7 @@ import {
   FieldValues
 } from 'react-hook-form';
 import { SelectList } from 'react-native-dropdown-select-list';
-import { Ghost, Mummy, Vampire, Zombie } from '../../assets/svgs';
+import { Ghost, Mummy, Vampire, Zombie, PinDoll } from '../../assets/svgs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type CreateInputs = {
@@ -39,7 +40,8 @@ const ICONS = [
   { key: 'zombie', value: <Zombie /> },
   { key: 'ghost', value: <Ghost /> },
   { key: 'vampire', value: <Vampire /> },
-  { key: 'mummy', value: <Mummy /> }
+  { key: 'mummy', value: <Mummy /> },
+  { key: 'pinDoll', value: <PinDoll /> }
 ];
 
 export default function NewGame() {
@@ -101,6 +103,7 @@ export default function NewGame() {
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
+                  style={{ height: 50, fontSize: 20 }}
                 />
               )}
               name="name"
@@ -111,7 +114,7 @@ export default function NewGame() {
         <View style={styles.iconContainer}>
           <Text>Icon: </Text>
           {/* TODO change this regular View into a ScrollView to allow adding more icons and scrolling */}
-          <View style={styles.iconInput}>
+          <ScrollView style={styles.iconInput} horizontal>
             <Controller
               control={control}
               rules={{
@@ -150,7 +153,7 @@ export default function NewGame() {
               )}
               name="icon"
             />
-          </View>
+          </ScrollView>
         </View>
         <View style={styles.colorContainer}>
           <Text>Color: </Text>
@@ -197,23 +200,30 @@ const styles = StyleSheet.create({
     padding: 10
   },
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#2e78b7',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    paddingBottom: 10
   },
   nameContainer: {
     backgroundColor: 'lightgreen'
   },
   nameLabel: {},
-  nameInput: { borderWidth: 1, borderColor: '#000', backgroundColor: '#fff' },
+  nameInput: {
+    borderWidth: 1,
+    borderColor: '#000',
+    backgroundColor: '#fff',
+    height: 50
+  },
   colorContainer: {
     backgroundColor: 'lightblue'
   },
   colorLabel: {},
   colorInput: { borderWidth: 1, borderColor: '#000', backgroundColor: '#fff' },
   iconContainer: {
-    backgroundColor: 'lightyellow'
+    backgroundColor: 'lightyellow',
+    flex: 1
   },
   iconLabel: {},
   iconInput: {
