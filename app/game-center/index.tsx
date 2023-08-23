@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { Link, Stack, useLocalSearchParams } from 'expo-router';
+import { Link, Stack, useLocalSearchParams, useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Character } from '../../constants/Character';
 import { SettingsWheel } from '../../assets/svgs';
@@ -11,10 +11,12 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 export default function GameCenter() {
   const { character } = useLocalSearchParams();
   const { setOrientation } = useOrientationContext();
+  const navigation = useNavigation();
 
   const [characterData, setCharacterData] = useState<Character>(
     {} as Character
   );
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     setOrientation(ScreenOrientation.Orientation.LANDSCAPE_RIGHT);
@@ -48,23 +50,42 @@ export default function GameCenter() {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: 'Game Center',
-          headerStyle: {
-            backgroundColor: '#84daf2'
-          },
-          headerTitleStyle: {
-            color: '#d6a811',
-            fontWeight: 'bold'
-          },
-          headerTintColor: '#000',
-          headerBackVisible: false
+          headerBackVisible: false,
+          headerShown: false
         }}
       />
+      <View style={styles.settingsWheel}>
+        <Pressable onPress={() => setIsModalVisible(prev => !prev)}>
+          <SettingsWheel />
+        </Pressable>
+      </View>
       <View>
-        {/* NOTE testing purposes only */}
-        <Link href="/">Back</Link>
-        {/* TODO More than likely will need to open a modal */}
-        <SettingsWheel />
+        <Modal
+          animationType="fade"
+          visible={isModalVisible}
+          onRequestClose={() => setIsModalVisible(prev => !prev)}
+          supportedOrientations={['landscape']}
+          transparent
+        >
+          <View style={styles.modal}>
+            <Text style={styles.modalTitle}>Menu</Text>
+            <Text style={styles.modalText}>
+              Buttons and controls can go here
+            </Text>
+            <Pressable
+              style={styles.modalButton}
+              onPress={() => navigation.navigate('index')}
+            >
+              <Text>Home</Text>
+            </Pressable>
+            <Pressable
+              style={styles.modalButton}
+              onPress={() => setIsModalVisible(prev => !prev)}
+            >
+              <Text>Close</Text>
+            </Pressable>
+          </View>
+        </Modal>
       </View>
       <Text style={styles.title}>Game Center</Text>
       <Text style={styles.title}>Character: {characterData.name}</Text>
@@ -93,5 +114,41 @@ const styles = StyleSheet.create({
     color: '#d6a811',
     alignSelf: 'center'
   },
-  chosenColor: {}
+  chosenColor: {},
+  settingsWheel: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    padding: 20
+  },
+  modal: {
+    position: 'absolute',
+    top: '22.5%',
+    left: '36%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#d18408',
+    backgroundColor: '#d6a811',
+    borderWidth: 3,
+    borderRadius: 10,
+    padding: 20
+  },
+  modalContainer: {},
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#84daf2',
+    paddingBottom: 10
+  },
+  modalText: {},
+  modalButton: {
+    margin: 10,
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#d18408',
+    backgroundColor: '#84daf2',
+    width: 75,
+    height: 50
+  }
 });
