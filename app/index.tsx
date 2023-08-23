@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, Animated } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { Cloud, CloudReversed } from '../assets/svgs';
 import SimpleButton from '../components/Buttons/SimpleButton';
 import Menu from '../components/LandingPage/Menu';
@@ -27,8 +28,10 @@ const LandingPage = (): JSX.Element => {
   const { isLandscape, dimensions, setOrientation } = useOrientationContext();
 
   useEffect(() => {
-    setOrientation(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-  }, []);
+    setOrientation(ScreenOrientation.Orientation.PORTRAIT_UP);
+    // NOTE this fires on all screens in this 'stack'
+    // this landing page, the new game page, the load game page and settings page
+  }, [useIsFocused()]);
 
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const translateXLeft = useRef(new Animated.Value(0)).current;

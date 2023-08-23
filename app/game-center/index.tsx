@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Pressable,
-  Button
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Character } from '../../constants/Character';
 import { SettingsWheel } from '../../assets/svgs';
+import useOrientationContext from '../../contexts/OrientationContext';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 export default function GameCenter() {
   const { character } = useLocalSearchParams();
+  const { setOrientation } = useOrientationContext();
+
   const [characterData, setCharacterData] = useState<Character>(
     {} as Character
   );
+
+  useEffect(() => {
+    setOrientation(ScreenOrientation.Orientation.LANDSCAPE_RIGHT);
+  }, [useIsFocused()]);
 
   // NOTE typed as 'any' for now until figure out what structure it should be
   const [characterError, setCharacterError] = useState<any>(null);

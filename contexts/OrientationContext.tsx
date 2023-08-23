@@ -11,7 +11,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 export interface OrientationContextProps {
   isLandscape: boolean;
   dimensions: Record<string, number>;
-  setOrientation: (orientation: ScreenOrientation.OrientationLock) => void;
+  setOrientation: (orientation: ScreenOrientation.Orientation) => void;
 }
 
 export const OrientationContext = createContext<OrientationContextProps>({
@@ -37,11 +37,11 @@ export const OrientationProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [windowDimensions]);
 
-  const setOrientation = async (
-    orientation: ScreenOrientation.OrientationLock
-  ) => {
-    await ScreenOrientation.unlockAsync();
-    await ScreenOrientation.lockAsync(orientation);
+  const setOrientation = async (orientation: ScreenOrientation.Orientation) => {
+    await ScreenOrientation.lockPlatformAsync({
+      screenOrientationArrayIOS: [orientation],
+      screenOrientationConstantAndroid: orientation
+    });
   };
 
   const state = {
