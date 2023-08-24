@@ -59,31 +59,34 @@ export default function GameCenter() {
           <SettingsWheel />
         </Pressable>
       </View>
-      <View>
+      <View style={styles.modalContainer}>
         <Modal
           animationType="fade"
           visible={isModalVisible}
           onRequestClose={() => setIsModalVisible(prev => !prev)}
           supportedOrientations={['landscape']}
           transparent
+          style={styles.modalContainer}
         >
           <View style={styles.modal}>
-            <Text style={styles.modalTitle}>Menu</Text>
-            <Text style={styles.modalText}>
-              Buttons and controls can go here
-            </Text>
-            <Pressable
-              style={styles.modalButton}
-              onPress={() => navigation.navigate('index')}
-            >
-              <Text>Home</Text>
-            </Pressable>
-            <Pressable
-              style={styles.modalButton}
-              onPress={() => setIsModalVisible(prev => !prev)}
-            >
-              <Text>Close</Text>
-            </Pressable>
+            <View style={styles.modalView}>
+              <Text style={styles.modalTitle}>Menu</Text>
+              <Text style={styles.modalText}>
+                Buttons and controls can go here
+              </Text>
+              <Pressable
+                style={styles.modalButton}
+                onPress={() => navigation.navigate('index')}
+              >
+                <Text>Home</Text>
+              </Pressable>
+              <Pressable
+                style={styles.modalButton}
+                onPress={() => setIsModalVisible(prev => !prev)}
+              >
+                <Text>Close</Text>
+              </Pressable>
+            </View>
           </View>
         </Modal>
       </View>
@@ -121,19 +124,29 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 20
   },
-  modal: {
-    position: 'absolute',
-    top: '22.5%',
-    left: '36%',
-    alignItems: 'center',
+  modalContainer: {
+    width: '100%',
+    backgroundColor: 'red',
     justifyContent: 'center',
+    marginLeft: 50
+  },
+  modal: {
+    height: 250,
+    width: 300,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 'auto',
+    marginBottom: 'auto',
     borderColor: '#d18408',
     backgroundColor: '#d6a811',
     borderWidth: 3,
     borderRadius: 10,
     padding: 20
   },
-  modalContainer: {},
+  modalView: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -149,6 +162,8 @@ const styles = StyleSheet.create({
     borderColor: '#d18408',
     backgroundColor: '#84daf2',
     width: 75,
-    height: 50
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
