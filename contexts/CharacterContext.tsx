@@ -5,17 +5,10 @@ import React, {
   useContext,
   ReactNode
 } from 'react';
+import { useGlobalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Character } from '../constants/Character';
-import { Ghost, Mummy, Vampire, Zombie, PinDoll } from '../assets/svgs';
-
-const ICONS = [
-  { key: 'zombie', value: <Zombie /> },
-  { key: 'ghost', value: <Ghost /> },
-  { key: 'vampire', value: <Vampire /> },
-  { key: 'mummy', value: <Mummy /> },
-  { key: 'pinDoll', value: <PinDoll /> }
-];
+import { ICONS } from '../constants/Configs';
 
 export interface CharacterContextProps {
   characters: Character[];
@@ -34,6 +27,9 @@ export const CharacterContext = createContext<CharacterContextProps>({
 });
 
 export const CharacterProvider = ({ children }: { children: ReactNode }) => {
+  // since we know exactly what the param should be, we can destructure it right away
+  // character will be just the name of the character
+  const { characterName } = useGlobalSearchParams();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [currentCharacter, setCurrentCharacter] = useState<Character | null>(
     null
@@ -43,10 +39,8 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const getCharacters = async () => {
       AsyncStorage.getAllKeys().then(keys => {
-        console.log('KEYS', keys);
         const keyCopies = [...keys];
         AsyncStorage.multiGet(keyCopies).then(characters => {
-          console.log('CHARACTERS', characters);
           const characterCopies = [...characters];
           const characterObjects = characterCopies.map(character => {
             const [key, value] = character;
@@ -58,6 +52,22 @@ export const CharacterProvider = ({ children }: { children: ReactNode }) => {
     };
     getCharacters();
   }, []);
+
+  useEffect(() => {
+    // for situations where the app is refreshed, the currentCharacter will be reset
+    // so we can check for the 'characterName' param, and if present (which means the user has selected a character at some point in current session) we can set it as the currentCharacter
+    const getCurrentCharacter = () => {
+      if (typeof characterName !== 'string') {
+        // NOTE pretty confident this will never happen, but not sure what to do here
+        return;
+      }
+      if (!currentCharacter && characterName) {
+        const target = characters.find(char => char.name === characterName);
+        setCurrentCharacter(target ? target : null);
+      }
+    };
+    getCurrentCharacter();
+  }, [characters]);
 
   useEffect(() => {
     if (currentCharacter) {

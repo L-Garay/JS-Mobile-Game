@@ -64,7 +64,7 @@ export default function LoadGame() {
                     onPress={() => {
                       setCurrentCharacter(item);
                       navigation.navigate('game-center/index', {
-                        character: `character_${item.name}`
+                        characterName: item.name
                       });
                     }}
                   >
@@ -82,7 +82,7 @@ export default function LoadGame() {
                     onPress={() => {
                       setCurrentCharacter(item);
                       navigation.navigate('game-center/index', {
-                        character: `character_${item.name}`
+                        characterName: item.name
                       });
                     }}
                   >

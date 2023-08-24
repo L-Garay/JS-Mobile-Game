@@ -74,15 +74,13 @@ export default function NewGame() {
       setCurrentCharacter(typedData);
       // navigate to game center
       navigation.navigate('game-center/index', {
-        character: `character_${data.name}`
+        characterName: data.name
       });
     } catch (error) {
       console.error(error);
       SubmitionErrorAlert(data, error);
     }
   };
-
-  // console.log(watch('name'), watch('color'), watch('icon'));
 
   return (
     <View style={styles.container}>

@@ -1,5 +1,5 @@
 type GameCenterScreenParamList = {
-  character: string;
+  characterName: string;
 };
 
 export type RootStackParamList = {
