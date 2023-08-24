@@ -5,6 +5,7 @@ import {
   ThemeProvider
 } from '@react-navigation/native';
 import { OrientationProvider } from '../contexts/OrientationContext';
+import { CharacterProvider } from '../contexts/CharacterContext';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
@@ -48,10 +49,12 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <OrientationProvider>
-        <Stack>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="game-center/index" />
-        </Stack>
+        <CharacterProvider>
+          <Stack>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="game-center/index" />
+          </Stack>
+        </CharacterProvider>
       </OrientationProvider>
     </ThemeProvider>
   );

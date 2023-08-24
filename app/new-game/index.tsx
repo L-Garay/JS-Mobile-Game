@@ -13,8 +13,10 @@ import {
 import { useNavigation } from 'expo-router';
 import { useForm, Controller, FieldValues } from 'react-hook-form';
 import { SelectList } from 'react-native-dropdown-select-list';
-import { Ghost, Mummy, Vampire, Zombie, PinDoll } from '../../assets/svgs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ICONS, COLOR_OPTIONS } from '../../constants/Configs';
+import useCharacterContext from '../../contexts/CharacterContext';
+import { Character } from 'constants/Character';
 
 type CreateInputs = {
   name: string;
@@ -22,28 +24,13 @@ type CreateInputs = {
   icon: any;
 };
 
-const COLOR_OPTIONS = [
-  { key: 'red', value: 'Red' },
-  { key: 'blue', value: 'Blue' },
-  { key: 'green', value: 'Green' },
-  { key: 'orange', value: 'Orange' },
-  { key: 'purple', value: 'Purple' },
-  { key: 'yellow', value: 'Yellow' },
-  { key: 'pink', value: 'Pink' }
-];
-
-const ICONS = [
-  { key: 'zombie', value: <Zombie /> },
-  { key: 'ghost', value: <Ghost /> },
-  { key: 'vampire', value: <Vampire /> },
-  { key: 'mummy', value: <Mummy /> },
-  { key: 'pinDoll', value: <PinDoll /> }
-];
-
 export default function NewGame() {
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
   const [selectedIcon, setSelectedIcon] = useState<string>('');
+
   const navigation = useNavigation();
+  const { setCurrentCharacter } = useCharacterContext();
+
   const defaultValues = {
     name: '',
     color: '',
@@ -79,8 +66,13 @@ export default function NewGame() {
       return;
     }
     try {
+      // save character to stroage
       const stringifiedData = JSON.stringify(data);
       await AsyncStorage.setItem(`character_${data.name}`, stringifiedData);
+      // save character to context
+      const typedData = data as Character;
+      setCurrentCharacter(typedData);
+      // navigate to game center
       navigation.navigate('game-center/index', {
         character: `character_${data.name}`
       });

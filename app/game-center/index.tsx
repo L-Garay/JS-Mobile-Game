@@ -7,15 +7,13 @@ import { Character } from '../../constants/Character';
 import { SettingsWheel } from '../../assets/svgs';
 import useOrientationContext from '../../contexts/OrientationContext';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import useCharacterContext from '../../contexts/CharacterContext';
 
 export default function GameCenter() {
-  const { character } = useLocalSearchParams();
   const { setOrientation } = useOrientationContext();
+  const { currentCharacter } = useCharacterContext();
   const navigation = useNavigation();
 
-  const [characterData, setCharacterData] = useState<Character>(
-    {} as Character
-  );
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -25,27 +23,6 @@ export default function GameCenter() {
   // NOTE typed as 'any' for now until figure out what structure it should be
   const [characterError, setCharacterError] = useState<any>(null);
 
-  useEffect(() => {
-    const getCharacterData = async () => {
-      if (typeof character !== 'string') {
-        // NOTE I know that this will never be an array of strings, but useLocalSearchParams returns a string | string[]
-        // need to figure out a better way to handle this
-        return;
-      }
-      const characterData = await AsyncStorage.getItem(character);
-      if (!characterData) {
-        // NOTE thinking of dipsplaying some toast/error message to user, then rendering only a button to go home
-        setCharacterError('No character data found.');
-        console.log('No character data found.');
-        return;
-      }
-      setCharacterData(JSON.parse(characterData));
-    };
-    getCharacterData();
-  }, [character]);
-
-  console.log('characterData', characterData);
-
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -54,6 +31,7 @@ export default function GameCenter() {
           headerShown: false
         }}
       />
+      <View style={styles.characterDetails}></View>
       <View style={styles.settingsWheel}>
         <Pressable onPress={() => setIsModalVisible(prev => !prev)}>
           <SettingsWheel />
@@ -90,15 +68,19 @@ export default function GameCenter() {
           </View>
         </Modal>
       </View>
-      <Text style={styles.title}>Game Center</Text>
-      <Text style={styles.title}>Character: {characterData.name}</Text>
-      <View>
-        <Text>Color chosen: {characterData.color}</Text>
-      </View>
-      <View>
-        <Text>Icon chosen: {characterData.icon}</Text>
-        <View>{/* icon goes here */}</View>
-      </View>
+      {currentCharacter ? (
+        <>
+          <Text style={styles.title}>Game Center</Text>
+          <Text style={styles.title}>Character: {currentCharacter.name}</Text>
+          <View>
+            <Text>Color chosen: {currentCharacter.color}</Text>
+          </View>
+          <View>
+            <Text>Icon chosen: {currentCharacter.icon}</Text>
+            <View>{/* icon goes here */}</View>
+          </View>
+        </>
+      ) : null}
     </View>
   );
 }
@@ -118,11 +100,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   chosenColor: {},
+  characterDetails: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    padding: 20
+  },
   settingsWheel: {
     position: 'absolute',
     top: 0,
     right: 0,
-    padding: 20
+    padding: 20,
+    paddingLeft: 25
   },
   modalContainer: {
     width: '100%',

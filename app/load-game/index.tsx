@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   Pressable,
-  Button,
   FlatList,
   Alert
 } from 'react-native';
@@ -13,33 +11,14 @@ import { useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Character } from '../../constants/Character';
 import { Trash } from '../../assets/svgs';
+import useCharacterContext from '../../contexts/CharacterContext';
 
 export default function LoadGame() {
   const navigation = useNavigation();
-  const [characters, setCharacters] = useState<Character[]>([]);
+  const { characters, setCharacters, setCurrentCharacter } =
+    useCharacterContext();
   // TODO probably want to create universal error parser/handler/types
   const [deletionError, setDeletionError] = useState<any>(null);
-
-  useEffect(() => {
-    const getCharacters = async () => {
-      AsyncStorage.getAllKeys().then(keys => {
-        console.log('KEYS', keys);
-        const keyCopies = [...keys];
-        AsyncStorage.multiGet(keyCopies).then(characters => {
-          console.log('CHARACTERS', characters);
-          const characterCopies = [...characters];
-          const characterObjects = characterCopies.map(character => {
-            const [key, value] = character;
-            return JSON.parse(value ? value : '');
-          });
-          setCharacters(characterObjects);
-        });
-      });
-    };
-    getCharacters();
-  }, []);
-
-  console.log('characters', characters);
 
   const DeleteConfirmationAlert = (character: Character) => {
     Alert.alert(
@@ -82,11 +61,12 @@ export default function LoadGame() {
               return (
                 <View style={{ ...styles.itemContainer, paddingTop: 10 }}>
                   <Pressable
-                    onPress={() =>
+                    onPress={() => {
+                      setCurrentCharacter(item);
                       navigation.navigate('game-center/index', {
                         character: `character_${item.name}`
-                      })
-                    }
+                      });
+                    }}
                   >
                     <Text style={styles.item}>{item.name}</Text>
                   </Pressable>
@@ -99,11 +79,12 @@ export default function LoadGame() {
               return (
                 <View style={styles.itemContainer}>
                   <Pressable
-                    onPress={() =>
+                    onPress={() => {
+                      setCurrentCharacter(item);
                       navigation.navigate('game-center/index', {
                         character: `character_${item.name}`
-                      })
-                    }
+                      });
+                    }}
                   >
                     <Text style={styles.item}>{item.name}</Text>
                   </Pressable>
