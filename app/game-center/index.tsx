@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { Link, Stack, useLocalSearchParams, useNavigation } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Character } from '../../constants/Character';
+import { Stack, useNavigation } from 'expo-router';
 import { SettingsWheel } from '../../assets/svgs';
 import useOrientationContext from '../../contexts/OrientationContext';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -11,7 +9,7 @@ import useCharacterContext from '../../contexts/CharacterContext';
 
 export default function GameCenter() {
   const { setOrientation } = useOrientationContext();
-  const { currentCharacter } = useCharacterContext();
+  const { currentCharacter, characterIcon } = useCharacterContext();
   const navigation = useNavigation();
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -31,7 +29,25 @@ export default function GameCenter() {
           headerShown: false
         }}
       />
-      <View style={styles.characterDetails}></View>
+      {currentCharacter ? (
+        <View style={styles.characterDetailsContainer}>
+          <View style={styles.characterDetails}>
+            <View>{characterIcon}</View>
+            <View style={{ padding: 8 }}>
+              <Text style={styles.characterDetailsName}>
+                {currentCharacter.name}
+              </Text>
+              <View
+                style={{
+                  ...styles.characterDetailsColor,
+                  backgroundColor: currentCharacter.color
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      ) : null}
+
       <View style={styles.settingsWheel}>
         <Pressable onPress={() => setIsModalVisible(prev => !prev)}>
           <SettingsWheel />
@@ -100,11 +116,30 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   chosenColor: {},
-  characterDetails: {
+  characterDetailsContainer: {
     position: 'absolute',
     top: 0,
-    left: 0,
+    left: 20,
     padding: 20
+  },
+  characterDetails: {
+    height: 80,
+    maxWidth: 180,
+    flexDirection: 'row',
+    padding: 5
+  },
+  characterDetailsName: {
+    fontSize: 18,
+    color: '#000',
+    fontWeight: 'bold',
+    paddingBottom: 5
+  },
+  characterDetailsColor: {
+    height: 30,
+    width: 50,
+    borderStyle: 'solid',
+    borderWidth: 3,
+    borderColor: '#000'
   },
   settingsWheel: {
     position: 'absolute',
