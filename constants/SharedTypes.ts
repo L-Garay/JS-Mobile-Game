@@ -7,3 +7,16 @@ export type CustomSVGProps = SVGProps<SVGSVGElement> & {
     styles: any;
   };
 };
+
+export type BasicModalButtonProps = {
+  text: string;
+  action: () => void | any;
+};
+
+export type BasicModalProps = {
+  isModalVisible: boolean;
+  setIsModalVisible: (value: boolean) => void;
+  title?: string;
+  message?: string;
+  buttons: BasicModalButtonProps[];
+};
