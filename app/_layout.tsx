@@ -31,6 +31,8 @@ export default function RootLayout() {
     if (error) throw error;
   }, [error]);
 
+  //  add conditions to this effect to prevent the splash screen from hiding before the assets are loaded
+  // images, fonts, data, configs, etc.
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
@@ -54,7 +56,26 @@ function RootLayoutNav() {
           <CarouselProvider>
             <Stack>
               <Stack.Screen name="index" />
-              <Stack.Screen name="game-center/index" />
+              <Stack.Screen
+                name="game-center/index"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="game-center/GAME1"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="game-center/GAME2"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="game-center/GAME3"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="game-center/GAME4"
+                options={{ headerShown: false }}
+              />
             </Stack>
           </CarouselProvider>
         </CharacterProvider>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { Stack, useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router';
 import { SettingsWheel } from '../../assets/svgs';
 import useOrientationContext from '../../contexts/OrientationContext';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import useCharacterContext from '../../contexts/CharacterContext';
 import GameCarousel from '../../components/GameCenter/GameCarousel';
+import BasicModal from '../../components/Modals/BasicModal';
 
 export default function GameCenter() {
   const { setOrientation } = useOrientationContext();
@@ -24,12 +25,6 @@ export default function GameCenter() {
 
   return (
     <View style={styles.container}>
-      <Stack.Screen
-        options={{
-          headerBackVisible: false,
-          headerShown: false
-        }}
-      />
       {currentCharacter ? (
         <View style={styles.characterDetailsContainer}>
           <View style={styles.characterDetails}>
@@ -54,37 +49,13 @@ export default function GameCenter() {
           <SettingsWheel />
         </Pressable>
       </View>
-      <View style={styles.modalContainer}>
-        <Modal
-          animationType="fade"
-          visible={isModalVisible}
-          onRequestClose={() => setIsModalVisible(prev => !prev)}
-          supportedOrientations={['landscape']}
-          transparent
-          style={styles.modalContainer}
-        >
-          <View style={styles.modal}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Menu</Text>
-              <Text style={styles.modalText}>
-                Buttons and controls can go here
-              </Text>
-              <Pressable
-                style={styles.modalButton}
-                onPress={() => navigation.navigate('index')}
-              >
-                <Text>Home</Text>
-              </Pressable>
-              <Pressable
-                style={styles.modalButton}
-                onPress={() => setIsModalVisible(prev => !prev)}
-              >
-                <Text>Close</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-      </View>
+
+      <BasicModal
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+        message="This modal is for the game center"
+        buttons={[{ text: 'Home', action: () => navigation.navigate('index') }]}
+      />
       <View style={{ alignItems: 'center' }}>
         <GameCarousel />
       </View>
@@ -141,7 +112,6 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '100%',
-    backgroundColor: 'red',
     justifyContent: 'center',
     marginLeft: 50
   },
