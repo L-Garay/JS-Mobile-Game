@@ -1,11 +1,15 @@
+import { useNavigation } from 'expo-router';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function RENAME3() {
+  const navigation = useNavigation();
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>RENAME3</Text>
-    </View>
+    <Pressable onPress={() => navigation.navigate('game-center/GAME3')}>
+      <View style={styles.container}>
+        <Text style={styles.title}>RENAME3</Text>
+      </View>
+    </Pressable>
   );
 }
 
