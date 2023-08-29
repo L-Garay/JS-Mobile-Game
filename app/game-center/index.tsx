@@ -6,6 +6,7 @@ import { SettingsWheel } from '../../assets/svgs';
 import useOrientationContext from '../../contexts/OrientationContext';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import useCharacterContext from '../../contexts/CharacterContext';
+import GameCarousel from '../../components/GameCenter/GameCarousel';
 
 export default function GameCenter() {
   const { setOrientation } = useOrientationContext();
@@ -84,19 +85,9 @@ export default function GameCenter() {
           </View>
         </Modal>
       </View>
-      {currentCharacter ? (
-        <>
-          <Text style={styles.title}>Game Center</Text>
-          <Text style={styles.title}>Character: {currentCharacter.name}</Text>
-          <View>
-            <Text>Color chosen: {currentCharacter.color}</Text>
-          </View>
-          <View>
-            <Text>Icon chosen: {currentCharacter.icon}</Text>
-            <View>{/* icon goes here */}</View>
-          </View>
-        </>
-      ) : null}
+      <View style={{ alignItems: 'center' }}>
+        <GameCarousel />
+      </View>
     </View>
   );
 }
