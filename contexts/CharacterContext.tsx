@@ -27,8 +27,6 @@ export const CharacterContext = createContext<CharacterContextProps>({
 });
 
 export const CharacterProvider = ({ children }: { children: ReactNode }) => {
-  // since we know exactly what the param should be, we can destructure it right away
-  // character will be just the name of the character
   const { characterName } = useGlobalSearchParams();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [currentCharacter, setCurrentCharacter] = useState<Character | null>(
