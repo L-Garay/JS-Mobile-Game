@@ -5,7 +5,6 @@ import { LeftArrow, RightArrow } from '../../assets/svgs';
 
 export default function GameCarousel() {
   const {
-    isAnimated,
     action,
     nextAction,
     prevAction,
@@ -83,7 +82,7 @@ export default function GameCarousel() {
         animatedPreviousItemLeft.setValue(68);
       });
     }
-  }, [isAnimated]);
+  }, [action]);
 
   // Carousel control animations
   const animatedLeftArrowOpacity1 = useRef(new Animated.Value(0)).current;

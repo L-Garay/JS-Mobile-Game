@@ -35,8 +35,6 @@ const ITEM_CONFIG = [
 ];
 
 export interface CarouselContextProps {
-  activeIndex: number;
-  isAnimated: boolean;
   action: 'previous' | 'next' | 'reset';
   nextAction: () => boolean;
   prevAction: () => boolean;
@@ -50,8 +48,6 @@ export interface CarouselContextProps {
 }
 
 export const CarouselContext = createContext<CarouselContextProps>({
-  activeIndex: 0,
-  isAnimated: false,
   action: 'reset',
   nextAction: () => false,
   prevAction: () => false,
@@ -73,7 +69,6 @@ export const CarouselProvider = ({ children }: { children: ReactNode }) => {
   const [animatedPrevIndex, setAnimatedPrevIndex] = React.useState(
     ITEM_CONFIG.length - 1
   );
-  const [isAnimated, setIsAnimated] = React.useState(false);
   const [action, setAction] = React.useState<'previous' | 'next' | 'reset'>(
     'reset'
   );
@@ -97,7 +92,6 @@ export const CarouselProvider = ({ children }: { children: ReactNode }) => {
 
   const nextAction = () => {
     setHasFinished(false);
-    setIsAnimated(true);
     setAction('next');
     setNextIndex(prev => determineNextIndex(prev));
     setActiveIndex(prev => determineNextIndex(prev));
@@ -108,7 +102,6 @@ export const CarouselProvider = ({ children }: { children: ReactNode }) => {
       setAnimatedActiveIndex(prev => determineNextIndex(prev));
       setAnimatedPrevIndex(prev => determineNextIndex(prev));
       setAction('reset');
-      setIsAnimated(false);
       setHasFinished(true);
     }, 500); // NOTE setting this to +1 more than the animation duration somehow causes issues with the animation????
     // TODO investigate why that is
@@ -118,7 +111,6 @@ export const CarouselProvider = ({ children }: { children: ReactNode }) => {
 
   const prevAction = () => {
     setHasFinished(false);
-    setIsAnimated(true);
     setAction('previous');
     setNextIndex(prev => determinePreviousIndex(prev));
     setActiveIndex(prev => determinePreviousIndex(prev));
@@ -128,7 +120,6 @@ export const CarouselProvider = ({ children }: { children: ReactNode }) => {
       setAnimatedActiveIndex(prev => determinePreviousIndex(prev));
       setAnimatedPrevIndex(prev => determinePreviousIndex(prev));
       setAction('reset');
-      setIsAnimated(false);
       setHasFinished(true);
     }, 500); // NOTE setting this to +1 more than the animation duration somehow causes issues with the animation????
     // TODO investigate why that is
@@ -147,8 +138,6 @@ export const CarouselProvider = ({ children }: { children: ReactNode }) => {
   const animatedPrevElement = ITEM_CONFIG[animatedPrevIndex].elementTest;
 
   const state = {
-    activeIndex,
-    isAnimated,
     action,
     nextAction,
     prevAction,
