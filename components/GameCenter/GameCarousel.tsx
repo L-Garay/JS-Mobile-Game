@@ -88,19 +88,102 @@ export default function GameCarousel() {
     }
   }, [isAnimated]);
 
+  const animatedLeftArrowOpacity1 = useRef(new Animated.Value(0)).current;
+  const animatedLeftArrowOpacity2 = useRef(new Animated.Value(0)).current;
+  const animatedRightArrowOpacity1 = useRef(new Animated.Value(0)).current;
+  const animatedRightArrowOpacity2 = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (action === 'previous') {
+      Animated.sequence([
+        Animated.timing(animatedLeftArrowOpacity1, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: true
+        }),
+        Animated.timing(animatedLeftArrowOpacity2, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: true
+        })
+      ]).start(() => {
+        animatedLeftArrowOpacity1.setValue(0);
+        animatedLeftArrowOpacity2.setValue(0);
+      });
+    }
+    if (action === 'next') {
+      Animated.sequence([
+        Animated.timing(animatedRightArrowOpacity1, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: true
+        }),
+        Animated.timing(animatedRightArrowOpacity2, {
+          toValue: 1,
+          duration: 250,
+          useNativeDriver: true
+        })
+      ]).start(() => {
+        animatedRightArrowOpacity1.setValue(0);
+        animatedRightArrowOpacity2.setValue(0);
+      });
+    }
+  }, [action]);
+
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {/* previous controls */}
       <TouchableHighlight
         style={{
           zIndex: 10,
-          borderColor: 'red',
-          borderWidth: !hasFinished ? 5 : 0
+          backgroundColor: 'transparent'
         }}
         onPress={prevAction}
         disabled={!hasFinished}
+        underlayColor="transparent"
       >
-        <LeftArrow />
+        <View
+          style={{
+            flexDirection: 'row',
+            position: 'relative',
+            width: 150,
+            height: 64,
+            backgroundColor: 'transparent'
+          }}
+        >
+          <Animated.View
+            style={{
+              opacity: animatedLeftArrowOpacity2,
+              position: 'absolute',
+              right: '50%',
+              top: 0
+            }}
+          >
+            <LeftArrow />
+          </Animated.View>
+          <Animated.View
+            style={{
+              opacity: animatedLeftArrowOpacity1,
+              position: 'absolute',
+              right: '30%',
+              top: 0
+            }}
+          >
+            <LeftArrow />
+          </Animated.View>
+          <LeftArrow
+            svgStyle={{
+              styles: {
+                opacity: 1,
+                position: 'absolute',
+                right: '10%',
+                top: 0
+              }
+            }}
+          />
+        </View>
       </TouchableHighlight>
+      {/* carousel */}
       <View style={{ height: 250, width: 450 }}>
         <View style={styles.carouselWrapper}>
           <View style={styles.overflowContainer}>
@@ -156,16 +239,56 @@ export default function GameCarousel() {
           </View>
         </View>
       </View>
+      {/* next controls */}
       <TouchableHighlight
         style={{
           zIndex: 10,
-          borderColor: 'red',
-          borderWidth: !hasFinished ? 5 : 0
+          backgroundColor: 'transparent'
         }}
         onPress={nextAction}
         disabled={!hasFinished}
+        underlayColor="transparent"
       >
-        <RightArrow />
+        <View
+          style={{
+            flexDirection: 'row',
+            position: 'relative',
+            width: 150,
+            height: 64,
+            backgroundColor: 'transparent'
+          }}
+        >
+          <RightArrow
+            svgStyle={{
+              styles: {
+                opacity: 1,
+                position: 'absolute',
+                top: 0,
+                left: '10%'
+              }
+            }}
+          />
+          <Animated.View
+            style={{
+              opacity: animatedRightArrowOpacity1,
+              position: 'absolute',
+              top: 0,
+              left: '30%'
+            }}
+          >
+            <RightArrow />
+          </Animated.View>
+          <Animated.View
+            style={{
+              opacity: animatedRightArrowOpacity2,
+              position: 'absolute',
+              top: 0,
+              left: '50%'
+            }}
+          >
+            <RightArrow />
+          </Animated.View>
+        </View>
       </TouchableHighlight>
     </View>
   );

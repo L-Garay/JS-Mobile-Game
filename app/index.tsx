@@ -137,7 +137,8 @@ const LandingPage = (): JSX.Element => {
             },
             { translateX: translateXLeft },
 
-            { translateY: translateYDown }
+            { translateY: translateYDown },
+            { perspective: 1000 } // https://reactnative.dev/docs/next/animations#bear-in-mind
           ]
         }}
       >
@@ -157,7 +158,8 @@ const LandingPage = (): JSX.Element => {
           transform: [
             { scale: scaleAnim },
             { translateX: translateXRight },
-            { translateY: translateYUp }
+            { translateY: translateYUp },
+            { perspective: 1000 } // https://reactnative.dev/docs/next/animations#bear-in-mind
           ]
         }}
       >
