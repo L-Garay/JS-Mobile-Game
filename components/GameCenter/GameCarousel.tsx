@@ -5,7 +5,6 @@ import { LeftArrow, RightArrow } from '../../assets/svgs';
 
 export default function GameCarousel() {
   const {
-    isAnimated,
     action,
     nextAction,
     prevAction,
@@ -18,76 +17,74 @@ export default function GameCarousel() {
     hasFinished
   } = useCaourselContext();
 
-  const [isAnimating, setIsAnimating] = React.useState<boolean>(false);
-
-  const leftInputRange = [-120, 120];
-  const leftOutputRange = ['-120%', '120%'];
-
+  // Carousel animations
   const animatedNextItemLeft = useRef(new Animated.Value(-1)).current;
   const animatedActiveItemLeft = useRef(new Animated.Value(33)).current;
   const animatedPreviousItemLeft = useRef(new Animated.Value(68)).current;
+  const leftInputRange = [-120, 120];
+  const leftOutputRange = ['-120%', '120%'];
 
   const animatedNextItemOpacity = useRef(new Animated.Value(0)).current;
   const activeItemOpacity = useRef(new Animated.Value(1)).current;
   const animatedActiveItemOpacity = useRef(new Animated.Value(0)).current;
   const animatedPreviousItemOpacity = useRef(new Animated.Value(0)).current;
 
-  // NOTE what is happening is that the animation is firing initially for the 'next'/'previous' action, and it WORKS just fine
-  // However, when the context's setTimeout() is fired and the 'reset' action and setIsAnimated() is fired, whicher one of those is called first, is causeing the animation to fire again, HOWEVER, it is being called with only one updated value for 'action' or 'isAnimated' (depending on which one is called first)
-  // this leads to incorrect animation behavior, i.e. the opacity values not changing becasue 'isAnimated' is 'true' but the 'action' is 'reset' OR the positions of the cards being wrong because the action is still 'next'/'previous' but the 'isAnimated' is 'false'
-
-  // NOTE solution that seems to be working for now: only listen to one or the other values (action or isAnimated)
-  // since they get set at basically the same time and indicate the same thing, I feel confident listening to only one
-  // this way we only fire the effect on the one change, not both
-  // ALSO, decrease the duration of the opacity change when 'isAnimated' is 'false' so that the opacity change is not visible to the user
-
   useEffect(() => {
-    if (isAnimating === false) {
-      setIsAnimating(true);
+    if (action === 'next' || action === 'previous') {
       Animated.parallel([
         // handle opacity
         Animated.timing(animatedNextItemOpacity, {
-          toValue: isAnimated ? 1 : 0,
-          duration: isAnimated ? 350 : 1,
+          toValue: 1,
+          duration: 350,
           useNativeDriver: false
         }),
         Animated.timing(activeItemOpacity, {
-          toValue: isAnimated === false ? 1 : 0,
-          duration: isAnimated ? 350 : 1,
+          toValue: 0,
+          duration: 350,
           useNativeDriver: false
         }),
         Animated.timing(animatedActiveItemOpacity, {
-          toValue: isAnimated ? 1 : 0,
-          duration: isAnimated ? 350 : 1,
+          toValue: 1,
+          duration: 350,
           useNativeDriver: false
         }),
         Animated.timing(animatedPreviousItemOpacity, {
-          toValue: isAnimated ? 1 : 0,
-          duration: isAnimated ? 350 : 1,
+          toValue: 1,
+          duration: 350,
           useNativeDriver: false
         }),
         // handle left
         Animated.timing(animatedNextItemLeft, {
-          toValue: action === 'next' ? 33 : action === 'previous' ? -35 : -1,
+          toValue: action === 'next' ? 33 : -35,
           duration: 350,
           useNativeDriver: false
         }),
         Animated.timing(animatedActiveItemLeft, {
-          toValue: action === 'next' ? 68 : action === 'previous' ? -1 : 33,
+          toValue: action === 'next' ? 68 : -1,
           duration: 350,
           useNativeDriver: false
         }),
         Animated.timing(animatedPreviousItemLeft, {
-          toValue: action === 'next' ? 115 : action === 'previous' ? 33 : 68,
+          toValue: action === 'next' ? 115 : 33,
           duration: 350,
           useNativeDriver: false
         })
       ]).start(() => {
-        setIsAnimating(false);
+        // reset values manually instead of using 'reset' action and animating back to original position
+        // this way we can instantly hide the animated elements and show the original elements once the initial animation is complete
+        // then the animated elements are moved back to their original positions while hidden
+        animatedNextItemOpacity.setValue(0);
+        animatedActiveItemOpacity.setValue(0);
+        animatedPreviousItemOpacity.setValue(0);
+        activeItemOpacity.setValue(1);
+        animatedNextItemLeft.setValue(-1);
+        animatedActiveItemLeft.setValue(33);
+        animatedPreviousItemLeft.setValue(68);
       });
     }
-  }, [isAnimated]);
+  }, [action]);
 
+  // Carousel control animations
   const animatedLeftArrowOpacity1 = useRef(new Animated.Value(0)).current;
   const animatedLeftArrowOpacity2 = useRef(new Animated.Value(0)).current;
   const animatedRightArrowOpacity1 = useRef(new Animated.Value(0)).current;
@@ -98,12 +95,12 @@ export default function GameCarousel() {
       Animated.sequence([
         Animated.timing(animatedLeftArrowOpacity1, {
           toValue: 1,
-          duration: 250,
+          duration: 150,
           useNativeDriver: true
         }),
         Animated.timing(animatedLeftArrowOpacity2, {
           toValue: 1,
-          duration: 250,
+          duration: 150,
           useNativeDriver: true
         })
       ]).start(() => {
@@ -115,12 +112,12 @@ export default function GameCarousel() {
       Animated.sequence([
         Animated.timing(animatedRightArrowOpacity1, {
           toValue: 1,
-          duration: 250,
+          duration: 150,
           useNativeDriver: true
         }),
         Animated.timing(animatedRightArrowOpacity2, {
           toValue: 1,
-          duration: 250,
+          duration: 150,
           useNativeDriver: true
         })
       ]).start(() => {
