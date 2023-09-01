@@ -9,3 +9,4 @@ export { default as Trash } from './Trash';
 export { default as PinDoll } from './PinDoll';
 export { default as LeftArrow } from './LeftArrow';
 export { default as RightArrow } from './RightArrow';
+export { default as Dice } from './Dice';
