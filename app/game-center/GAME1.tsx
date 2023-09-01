@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from 'expo-router';
 import useCharacterContext from '../../contexts/CharacterContext';
 import SettingsWheelModal from '../../components/GameCenter/SettingsWheelModal';
+import RockPaperScissorsMenu from '../../components/Games/RockPaperScissors/RockPaperScissorsMenu';
 
 export default function GAME1() {
   const navigation = useNavigation();
@@ -19,7 +20,10 @@ export default function GAME1() {
   return (
     <View style={styles.container}>
       <SettingsWheelModal />
-      <Text style={styles.title}>GAME1</Text>
+      <View style={styles.menu}>
+        {/* Render menu first, capture the config options and pass to actual game */}
+        <RockPaperScissorsMenu />
+      </View>
     </View>
   );
 }
@@ -27,12 +31,12 @@ export default function GAME1() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#84daf2',
-    height: '100%'
+    height: '100%',
+    justifyContent: 'center'
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#d6a811',
-    alignSelf: 'center'
+  title: {},
+  menu: {
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
