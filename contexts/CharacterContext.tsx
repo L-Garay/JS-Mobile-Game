@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { useGlobalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Character } from '../constants/Character';
+import { Character } from '../constants/types/Character';
 import { ICONS } from '../constants/Configs';
 
 export interface CharacterContextProps {
