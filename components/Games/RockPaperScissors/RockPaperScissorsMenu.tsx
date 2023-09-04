@@ -29,12 +29,17 @@ const RockPaperScissorsMenu = () => {
     return { icon, index };
   };
 
-  const [opponent, setOpponent] = useState<Character & { iconIndex: number }>({
-    name: getRandomName(),
-    color: getRandomColor(),
-    icon: getRandomIcon().icon,
-    iconIndex: getRandomIcon().index
-  });
+  const [opponent, setOpponent] = useState<Character & { iconIndex: number }>(
+    () => {
+      const { icon, index } = getRandomIcon();
+      return {
+        name: getRandomName(),
+        color: getRandomColor(),
+        icon,
+        iconIndex: index
+      };
+    }
+  );
 
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('easy');
   const [selectedFists, setSelectedFists] = useState<string>('one');
