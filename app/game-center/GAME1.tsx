@@ -4,6 +4,7 @@ import { useNavigation } from 'expo-router';
 import useCharacterContext from '../../contexts/CharacterContext';
 import SettingsWheelModal from '../../components/GameCenter/SettingsWheelModal';
 import RockPaperScissorsMenu from '../../components/Games/RockPaperScissors/RockPaperScissorsMenu';
+import { RockPaperScissorsProvider } from '../../contexts/RockPaperScissorsContext';
 
 export default function GAME1() {
   const navigation = useNavigation();
@@ -18,13 +19,15 @@ export default function GAME1() {
   }, [currentCharacter]);
 
   return (
-    <View style={styles.container}>
-      <SettingsWheelModal />
-      <View style={styles.menu}>
-        {/* Render menu first, capture the config options and pass to actual game */}
-        <RockPaperScissorsMenu />
+    <RockPaperScissorsProvider>
+      <View style={styles.container}>
+        <SettingsWheelModal />
+        <View style={styles.menu}>
+          {/* Render menu first, capture the config options and pass to actual game */}
+          <RockPaperScissorsMenu />
+        </View>
       </View>
-    </View>
+    </RockPaperScissorsProvider>
   );
 }
 
