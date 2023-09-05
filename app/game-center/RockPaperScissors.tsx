@@ -6,7 +6,7 @@ import SettingsWheelModal from '../../components/GameCenter/SettingsWheelModal';
 import RockPaperScissorsMenu from '../../components/Games/RockPaperScissors/RockPaperScissorsMenu';
 import { RockPaperScissorsProvider } from '../../contexts/RockPaperScissorsContext';
 
-export default function GAME1() {
+export default function RockPaperScissors() {
   const navigation = useNavigation();
   const { currentCharacter } = useCharacterContext();
   const [hasStartedGame, setHasStartedGame] = useState<boolean>(false);

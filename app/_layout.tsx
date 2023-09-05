@@ -63,7 +63,7 @@ function RootLayoutNav() {
                   options={{ headerShown: false }}
                 />
                 <Stack.Screen
-                  name="game-center/GAME1"
+                  name="game-center/RockPaperScissors"
                   options={{ headerShown: false }}
                 />
                 <Stack.Screen

@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext } from 'react';
 import {
-  Rename1,
+  RockPaperScissorsCard,
   Rename2,
   Rename3,
   Rename4
@@ -11,8 +11,8 @@ const ITEM_CONFIG = [
   {
     index: 0,
     name: 'item 1',
-    element: () => <Rename1 />,
-    elementTest: Rename1
+    element: () => <RockPaperScissorsCard />,
+    elementTest: RockPaperScissorsCard
   },
   {
     index: 1,

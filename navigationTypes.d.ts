@@ -6,7 +6,7 @@ export type RootStackParamList = {
   index: undefined;
   '[...misssing]': undefined;
   'game-center/index': GameCenterScreenParamList;
-  'game-center/GAME1': undefined;
+  'game-center/RockPaperScissors': undefined;
   'game-center/GAME2': undefined;
   'game-center/GAME3': undefined;
   'game-center/GAME4': undefined;
