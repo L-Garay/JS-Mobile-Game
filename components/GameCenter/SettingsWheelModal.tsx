@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     padding: 20,
-    paddingLeft: 25
+    paddingLeft: 25,
+    zIndex: 100
   }
 });
