@@ -13,3 +13,7 @@ export type RPSGameConfig = {
 
 // TODO figure out what this should look like
 export type RPSScore = {};
+
+export type RPSMenuProps = {
+  setHasStartedGame: (hasStartedGame: boolean) => void;
+};

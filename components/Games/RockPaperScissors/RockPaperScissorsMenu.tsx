@@ -6,7 +6,10 @@ import { Dice } from '../../../assets/svgs';
 import useRPSContext from '../../../contexts/RockPaperScissorsContext';
 import { Slider } from '@miblanchard/react-native-slider';
 import SimpleButton from '../../../components/Buttons/SimpleButton';
-import { WinConditionType } from '../../../constants/types/Games/RockPaperScissors';
+import {
+  RPSMenuProps,
+  WinConditionType
+} from '../../../constants/types/Games/RockPaperScissors';
 
 const DIFFICULTY_OPTIONS = [
   { key: 'easy', value: 'Easy' },
@@ -36,7 +39,7 @@ const getRandomIcon = (): Record<string, any> => {
   return { icon, index };
 };
 
-const RockPaperScissorsMenu = () => {
+const RockPaperScissorsMenu = ({ setHasStartedGame }: RPSMenuProps) => {
   const { setCurrentGameConfig } = useRPSContext();
 
   const [opponnent, setOpponent] = useState<Character>(() => {
@@ -82,9 +85,6 @@ const RockPaperScissorsMenu = () => {
     setAllowDraws(false);
     setWinCondition('bestOf');
     setRequiredPoints(3);
-    // getNewName();
-    // getNewColor();
-    // getNewIcon();
   };
 
   const startGame = () => {
@@ -97,6 +97,7 @@ const RockPaperScissorsMenu = () => {
       opponnent
     };
     setCurrentGameConfig(config);
+    setHasStartedGame(true);
   };
 
   return (
@@ -190,9 +191,14 @@ const RockPaperScissorsMenu = () => {
                   return (
                     <Pressable
                       key={option.key}
-                      onPress={() =>
-                        setWinCondition(option.key as WinConditionType)
-                      }
+                      onPress={() => {
+                        setWinCondition(option.key as WinConditionType);
+                        if (option.key === 'bestOf') {
+                          setRequiredPoints(3);
+                        } else {
+                          setRequiredPoints(1);
+                        }
+                      }}
                       style={{ marginBottom: 10 }}
                     >
                       <View style={{ flexDirection: 'row' }}>
