@@ -10,22 +10,11 @@ import {
   RPSMenuProps,
   WinConditionType
 } from '../../../constants/types/Games/RockPaperScissors';
-
-const DIFFICULTY_OPTIONS = [
-  { key: 'easy', value: 'Easy' },
-  { key: 'medium', value: 'Medium' },
-  { key: 'hard', value: 'Hard' }
-];
-
-const FIST_OPTIONS = [
-  { key: 1, value: 'One fist' },
-  { key: 2, value: 'Two fists' }
-];
-
-const WIN_CONDITION_OPTIONS = [
-  { key: 'bestOf', value: 'Best of' },
-  { key: 'firstTo', value: 'First to' }
-];
+import {
+  DIFFICULTY_OPTIONS,
+  FIST_OPTIONS,
+  WIN_CONDITION_OPTIONS
+} from '../../../constants/configs/Games/RockPaperScissors';
 
 const getRandomColor = (): string => {
   return COLOR_OPTIONS[Math.floor(Math.random() * COLOR_OPTIONS.length)].value;
