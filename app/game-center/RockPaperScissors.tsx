@@ -14,6 +14,13 @@ export default function RockPaperScissors() {
   const { currentCharacter } = useCharacterContext();
   const [hasStartedGame, setHasStartedGame] = useState<boolean>(false);
   const [shouldRemoveMenu, setShouldRemoveMenu] = useState<boolean>(false);
+  const [shouldResetPage, setShouldResetPage] = useState<boolean>(false);
+
+  const resetPage = () => {
+    setHasStartedGame(false);
+    setShouldResetPage(true);
+    setShouldRemoveMenu(false);
+  };
 
   // should catch if there is no currentCharacter
   useEffect(() => {
@@ -74,9 +81,46 @@ export default function RockPaperScissors() {
         })
       ]).start(() => {
         setShouldRemoveMenu(true);
+        setShouldResetPage(false);
       });
     }
-  }, [hasStartedGame]);
+    if (shouldResetPage) {
+      console.log('shouldResetPage', shouldResetPage);
+      Animated.parallel([
+        Animated.timing(heightMenu, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: false
+        }),
+        Animated.timing(translateYMenu, {
+          toValue: 0,
+          duration: 500,
+          useNativeDriver: false
+        }),
+        Animated.timing(opacityMenu, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: false
+        }),
+
+        Animated.timing(translateYGame, {
+          toValue: 1000,
+          duration: 500,
+          useNativeDriver: false
+        }),
+        Animated.timing(opacityGame, {
+          toValue: 0,
+          duration: 500,
+          useNativeDriver: false
+        }),
+        Animated.timing(heightGame, {
+          toValue: 0,
+          duration: 500,
+          useNativeDriver: false
+        })
+      ]).start();
+    }
+  }, [hasStartedGame, shouldResetPage]);
 
   return (
     <RockPaperScissorsProvider>
@@ -115,7 +159,7 @@ export default function RockPaperScissors() {
               opacity: opacityGame
             }}
           >
-            <RockPaperScissorsGame />
+            <RockPaperScissorsGame resetPage={resetPage} />
           </Animated.View>
         ) : null}
       </View>

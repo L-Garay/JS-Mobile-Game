@@ -17,3 +17,7 @@ export type RPSScore = {};
 export type RPSMenuProps = {
   setHasStartedGame: (hasStartedGame: boolean) => void;
 };
+
+export type RPSGameProps = {
+  resetPage: () => void;
+};
