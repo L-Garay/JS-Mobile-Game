@@ -6,6 +6,7 @@ import { SettingsWheel } from '../../assets/svgs';
 import useOrientationContext from '../../contexts/OrientationContext';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import useCharacterContext from '../../contexts/CharacterContext';
+import useStorageContext from '../../contexts/StorageContext';
 import GameCarousel from '../../components/GameCenter/GameCarousel';
 import BasicModal from '../../components/Modals/BasicModal';
 
@@ -13,6 +14,8 @@ export default function GameCenter() {
   const { setOrientation } = useOrientationContext();
   const { currentCharacter, characterIcon } = useCharacterContext();
   const navigation = useNavigation();
+  // const { totalStorageUsed } = useStorageContext();
+  // console.log('totalStorageUsed: ', totalStorageUsed);
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 

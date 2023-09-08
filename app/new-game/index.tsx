@@ -16,7 +16,7 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ICONS, COLOR_OPTIONS } from '../../constants/Configs';
 import useCharacterContext from '../../contexts/CharacterContext';
-import { Character } from 'constants/Character';
+import { Character } from 'constants/types/Character';
 
 type CreateInputs = {
   name: string;

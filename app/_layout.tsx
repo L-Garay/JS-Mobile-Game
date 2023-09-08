@@ -7,6 +7,7 @@ import {
 import { OrientationProvider } from '../contexts/OrientationContext';
 import { CharacterProvider } from '../contexts/CharacterContext';
 import { CarouselProvider } from '../contexts/CarouselContext';
+import { StorageProvider } from '../contexts/StorageContext';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { useEffect } from 'react';
@@ -54,29 +55,31 @@ function RootLayoutNav() {
       <OrientationProvider>
         <CharacterProvider>
           <CarouselProvider>
-            <Stack>
-              <Stack.Screen name="index" />
-              <Stack.Screen
-                name="game-center/index"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="game-center/GAME1"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="game-center/GAME2"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="game-center/GAME3"
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="game-center/GAME4"
-                options={{ headerShown: false }}
-              />
-            </Stack>
+            <StorageProvider>
+              <Stack>
+                <Stack.Screen name="index" />
+                <Stack.Screen
+                  name="game-center/index"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="game-center/RockPaperScissors"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="game-center/GAME2"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="game-center/GAME3"
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="game-center/GAME4"
+                  options={{ headerShown: false }}
+                />
+              </Stack>
+            </StorageProvider>
           </CarouselProvider>
         </CharacterProvider>
       </OrientationProvider>

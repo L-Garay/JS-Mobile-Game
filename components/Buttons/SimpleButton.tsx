@@ -10,6 +10,9 @@ import {
 type SimpleButtonProps = PressableProps & {
   label: string;
   onPress: () => void;
+  containerStyle?: any;
+  buttonStyle?: any;
+  labelStyle?: any;
 };
 
 const styles = StyleSheet.create({
@@ -42,11 +45,17 @@ const styles = StyleSheet.create({
   }
 });
 
-const SimpleButton = ({ label, onPress }: SimpleButtonProps) => {
+const SimpleButton = ({
+  label,
+  onPress,
+  containerStyle,
+  buttonStyle,
+  labelStyle
+}: SimpleButtonProps) => {
   return (
-    <View style={styles.container}>
-      <Pressable style={styles.button} onPress={onPress}>
-        <Text style={styles.label}>{label}</Text>
+    <View style={{ ...styles.container, ...containerStyle }}>
+      <Pressable style={{ ...styles.button, ...buttonStyle }} onPress={onPress}>
+        <Text style={{ ...styles.label, ...labelStyle }}>{label}</Text>
       </Pressable>
     </View>
   );

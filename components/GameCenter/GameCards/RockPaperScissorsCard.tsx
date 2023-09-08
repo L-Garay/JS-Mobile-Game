@@ -2,12 +2,14 @@ import React from 'react';
 import { useNavigation } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-export default function RENAME1() {
+export default function RockPaperScissorsCard() {
   const navigation = useNavigation();
   return (
-    <Pressable onPress={() => navigation.navigate('game-center/GAME1')}>
+    <Pressable
+      onPress={() => navigation.navigate('game-center/RockPaperScissors')}
+    >
       <View style={styles.container}>
-        <Text style={styles.title}>RENAME1</Text>
+        <Text style={styles.title}>RockPaperScissorsCard</Text>
       </View>
     </Pressable>
   );

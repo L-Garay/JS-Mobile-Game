@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Character } from '../../constants/Character';
+import { Character } from '../../constants/types/Character';
 import { Trash } from '../../assets/svgs';
 import useCharacterContext from '../../contexts/CharacterContext';
 
