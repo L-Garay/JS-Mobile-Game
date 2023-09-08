@@ -97,10 +97,9 @@ const RockPaperScissorsGame = ({ resetPage }: RPSGameProps) => {
         <>
           {/* top row holds the user's info, game info, and opponent info */}
           <View style={styles.informationRow}>
-            {/* user info */}
+            {/* user score */}
             <View>
-              <Text>{currentCharacter.name}</Text>
-              <Text>{characterIcon}</Text>
+              <Text>Player: {userPoints}</Text>
             </View>
             {/* game info */}
             <View style={styles.gameInformation}>
@@ -122,10 +121,9 @@ const RockPaperScissorsGame = ({ resetPage }: RPSGameProps) => {
                 </Text>
               </View>
             </View>
-            {/* opponent info */}
+            {/* opponent score */}
             <View>
-              <Text>{currentGameConfig.opponnent.name}</Text>
-              <Text>{ICONS[currentGameConfig.opponnent.iconIndex].value}</Text>
+              <Text>Opponent: {opponentPoints}</Text>
             </View>
           </View>
           {/* it would be cool if these titles faded in and out */}
@@ -155,40 +153,42 @@ const RockPaperScissorsGame = ({ resetPage }: RPSGameProps) => {
               })}
             </View>
             {/* battle area with fists and RPS peices  */}
-            <View>
-              {fists.map((fist, index) => {
-                return (
-                  <View key={`${fist} + ${index}`}>
-                    <Text>fist</Text>
-                    <Image
-                      source={rightFistImage}
-                      style={{ padding: 0, margin: 0 }}
-                    />
-                  </View>
-                );
-              })}
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+            >
+              <View>
+                {fists.map((fist, index) => {
+                  return (
+                    <View key={`${fist} + ${index}`}>
+                      <Image
+                        source={rightFistImage}
+                        style={{ padding: 0, margin: 0 }}
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+              <View>
+                {fists.map((fist, index) => {
+                  return (
+                    <View key={`${fist} + ${index}`}>
+                      <Image
+                        source={leftFistImage}
+                        style={{ padding: 0, margin: 0 }}
+                      />
+                    </View>
+                  );
+                })}
+              </View>
             </View>
+            {/* opponent info */}
             <View>
-              {fists.map((fist, index) => {
-                return (
-                  <View key={`${fist} + ${index}`}>
-                    <Text>fist</Text>
-                    <Image
-                      source={leftFistImage}
-                      style={{ padding: 0, margin: 0 }}
-                    />
-                  </View>
-                );
-              })}
+              <Text>{currentGameConfig.opponnent.name}</Text>
+              <Text>{ICONS[currentGameConfig.opponnent.iconIndex].value}</Text>
             </View>
-            {/* what to put here? since opponent has no controls */}
           </View>
           {/* bottom row will hold player's scores and hold the 'Play' button */}
           <View style={styles.scoreAndPlayRow}>
-            {/* user score */}
-            <View>
-              <Text>Player: {userPoints}</Text>
-            </View>
             {/* play button */}
             <View>
               <SimpleButton
@@ -196,10 +196,6 @@ const RockPaperScissorsGame = ({ resetPage }: RPSGameProps) => {
                 onPress={() => console.log('pressed')}
                 containerStyle={{ width: 130 }}
               />
-            </View>
-            {/* opponent score */}
-            <View>
-              <Text>Opponent: {opponentPoints}</Text>
             </View>
           </View>
         </>
@@ -240,7 +236,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   gameRow: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'space-around'
   },
   selectionButton: {
     borderRadius: 7.5,
@@ -260,6 +257,8 @@ const styles = StyleSheet.create({
     textShadowRadius: 2
   },
   scoreAndPlayRow: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-end'
   }
 });
