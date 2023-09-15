@@ -41,7 +41,7 @@ const RockPaperScissorsGame = ({ resetPage }: RPSGameProps) => {
   const [userSelections, setUserSelections] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!currentGameConfig) {
+    if (Object.keys(currentGameConfig).length === 0) {
       Alert.alert(
         'No game configuration was found.',
         'Please retry from the game setup menu.',
@@ -76,130 +76,146 @@ const RockPaperScissorsGame = ({ resetPage }: RPSGameProps) => {
     }
   }, [currentCharacter, currentGameConfig, characterIcon]);
 
-  const contentReady = currentCharacter && currentGameConfig && characterIcon;
+  const contcharacterContentReady = currentCharacter && characterIcon;
+
+  const {
+    difficulty,
+    winConditionType,
+    requiredPoints,
+    allowDraws,
+    totalFists,
+    opponnent
+  } = currentGameConfig;
 
   // create an array filled with random string, representing the number of fists selected
   // to be used to iterate over and display the fists
-  const fists =
-    currentGameConfig?.totalFists === 2 ? ['fist', 'fist'] : ['fist'];
+  const fists = totalFists === 2 ? ['fist', 'fist'] : ['fist'];
   const rightFistImage =
-    currentGameConfig?.totalFists === 2
-      ? RightFacingFistLGCropped
-      : RightFacingFistXLCropped;
+    totalFists === 2 ? RightFacingFistLGCropped : RightFacingFistXLCropped;
   const leftFistImage =
-    currentGameConfig?.totalFists === 2
-      ? LeftFacingFistLGCropped
-      : LeftFacingFistXLCropped;
+    totalFists === 2 ? LeftFacingFistLGCropped : LeftFacingFistXLCropped;
+
+  console.log(opponnent);
 
   return (
     <View style={styles.gameContainer}>
-      {contentReady ? (
-        <>
-          {/* top row holds the user's info, game info, and opponent info */}
-          <View style={styles.informationRow}>
-            {/* user score */}
-            <View>
-              <Text>Player: {userPoints}</Text>
-            </View>
-            {/* game info */}
-            <View style={styles.gameInformation}>
-              <View>
-                <Text>
-                  Difficulty:{' '}
-                  {currentGameConfig.difficulty.charAt(0).toUpperCase() +
-                    currentGameConfig.difficulty.slice(1)}
-                </Text>
-                <Text>
-                  Game Type:{' '}
-                  {getWinCondition(currentGameConfig.winConditionType)}
-                </Text>
-              </View>
-              <View>
-                <Text>Required points: {currentGameConfig.requiredPoints}</Text>
-                <Text>
-                  Draws allowed: {currentGameConfig.allowDraws ? 'Yes' : 'No'}
-                </Text>
-              </View>
-            </View>
-            {/* opponent score */}
-            <View>
-              <Text>Opponent: {opponentPoints}</Text>
-            </View>
+      {/* top row holds the user's info, game info, and opponent info */}
+      <View style={styles.informationRow}>
+        {/* user score */}
+        <View>
+          <Text style={styles.scoreText}>{userPoints}</Text>
+        </View>
+        {/* game info */}
+        <View style={styles.gameInformation}>
+          <View>
+            <Text style={styles.infoText}>
+              Difficulty:{' '}
+              <Text
+                style={{
+                  color:
+                    difficulty === 'easy'
+                      ? 'green'
+                      : difficulty === 'medium'
+                      ? 'orange'
+                      : 'red'
+                }}
+              >
+                {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+              </Text>
+            </Text>
+            <Text style={styles.infoText}>
+              Game Type: {getWinCondition(winConditionType)}
+            </Text>
           </View>
-          {/* it would be cool if these titles faded in and out */}
-          {/* <View>
+          <View style={{ marginLeft: 10 }}>
+            <Text style={styles.infoText}>
+              Required points: {requiredPoints}
+            </Text>
+            <Text style={styles.infoText}>
+              Draws allowed: {allowDraws ? 'Yes' : 'No'}
+            </Text>
+          </View>
+        </View>
+        {/* opponent score */}
+        <View>
+          <Text style={styles.scoreText}>{opponentPoints}</Text>
+        </View>
+      </View>
+      {/* it would be cool if these titles faded in and out */}
+      {/* <View>
             <Text style={styles.title}>Welcome, {currentCharacter.name}!</Text>
             <Text style={styles.title}>Are you ready to play?</Text>
           </View> */}
-          {/* middle row will hold the actual game peices */}
-          <View style={styles.gameRow}>
-            {/* user fist controls */}
-            <View>
-              {POSSIBLE_SELECTIONS.map((selection, index) => {
-                return (
-                  <View key={selection.name}>
-                    <Pressable
-                      style={styles.selectionButton}
-                      onPress={() => {
-                        setUserSelections([...userSelections, selection.value]);
-                      }}
-                    >
-                      <Text style={styles.selectionLabel}>
-                        {selection.name}
-                      </Text>
-                    </Pressable>
-                  </View>
-                );
-              })}
-            </View>
-            {/* battle area with fists and RPS peices  */}
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'space-between' }}
+      {/* middle row will hold the actual game peices */}
+      <View style={styles.gameRow}>
+        {/* user fist controls */}
+        <View style={styles.selectionsContainer}>
+          {POSSIBLE_SELECTIONS.map((selection, index) => {
+            return (
+              <View key={selection.name}>
+                <Pressable
+                  style={styles.selectionButton}
+                  onPress={() => {
+                    setUserSelections([...userSelections, selection.value]);
+                  }}
+                >
+                  <Text style={styles.selectionLabel}>{selection.name}</Text>
+                </Pressable>
+              </View>
+            );
+          })}
+        </View>
+        {/* battle area with fists and RPS peices  */}
+        <View style={styles.fistContainer}>
+          {fists.map((fist, index) => {
+            return (
+              <View key={`${fist} + ${index}`} style={styles.fist}>
+                <Image
+                  source={rightFistImage}
+                  style={{ padding: 0, margin: 0 }}
+                />
+              </View>
+            );
+          })}
+          {fists.map((fist, index) => {
+            return (
+              <View key={`${fist} + ${index}`} style={styles.fist}>
+                <Image
+                  source={leftFistImage}
+                  style={{ padding: 0, margin: 0 }}
+                />
+              </View>
+            );
+          })}
+        </View>
+        {/* opponent info / play button */}
+        <View style={{ marginRight: -10 }}>
+          <View
+            style={{
+              ...styles.opponentContainer,
+              borderColor: `${opponnent.color.toLowerCase()}`,
+              backgroundColor: `${opponnent.shade}`
+            }}
+          >
+            <Text>{ICONS[opponnent.iconIndex].value}</Text>
+            <Text
+              style={{
+                ...styles.opponentName,
+                color: `${opponnent.color.toLowerCase()}`
+              }}
             >
-              <View>
-                {fists.map((fist, index) => {
-                  return (
-                    <View key={`${fist} + ${index}`}>
-                      <Image
-                        source={rightFistImage}
-                        style={{ padding: 0, margin: 0 }}
-                      />
-                    </View>
-                  );
-                })}
-              </View>
-              <View>
-                {fists.map((fist, index) => {
-                  return (
-                    <View key={`${fist} + ${index}`}>
-                      <Image
-                        source={leftFistImage}
-                        style={{ padding: 0, margin: 0 }}
-                      />
-                    </View>
-                  );
-                })}
-              </View>
-            </View>
-            {/* opponent info */}
-            <View>
-              <Text>{currentGameConfig.opponnent.name}</Text>
-              <Text>{ICONS[currentGameConfig.opponnent.iconIndex].value}</Text>
-            </View>
+              {opponnent.name}
+            </Text>
           </View>
-          {/* bottom row will hold player's scores and hold the 'Play' button */}
-          <View style={styles.scoreAndPlayRow}>
-            {/* play button */}
-            <View>
-              <SimpleButton
-                label="Play"
-                onPress={() => console.log('pressed')}
-                containerStyle={{ width: 130 }}
-              />
-            </View>
+          <View>
+            <SimpleButton
+              label="Play"
+              onPress={() => console.log('pressed')}
+              containerStyle={{ width: 130 }}
+            />
           </View>
-        </>
-      ) : null}
+        </View>
+      </View>
     </View>
   );
 };
@@ -209,7 +225,9 @@ export default RockPaperScissorsGame;
 const styles = StyleSheet.create({
   gameContainer: {
     height: '100%',
+    maxHeight: '100%',
     width: '90%',
+    justifyContent: 'center',
     marginVertical: 0,
     marginRight: 'auto',
     marginLeft: 'auto',
@@ -230,30 +248,68 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
-    paddingTop: 20
+    paddingTop: 0
+  },
+  scoreText: {
+    fontSize: 64
+  },
+  infoText: {
+    fontSize: 16,
+    marginBottom: 10,
+    fontWeight: 'bold'
   },
   gameInformation: {
     flexDirection: 'row'
   },
   gameRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    alignItems: 'center'
   },
+  selectionsContainer: {},
   selectionButton: {
     borderRadius: 7.5,
     borderWidth: 5,
     borderColor: '#d18408',
     backgroundColor: '#d6a811',
     padding: 10,
-    margin: 5,
+    marginHorizontal: 5,
+    marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center'
   },
   selectionLabel: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#fff',
     textShadowColor: '#000',
     textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2
+  },
+  fistContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    minWidth: 300
+  },
+  fist: {
+    borderWidth: 1,
+    borderColor: '#000',
+    borderStyle: 'solid'
+  },
+  opponentContainer: {
+    width: 150,
+    height: 150,
+    borderWidth: 2,
+    borderStyle: 'solid',
+    borderRadius: 75,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  opponentName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 2
   },
   scoreAndPlayRow: {
