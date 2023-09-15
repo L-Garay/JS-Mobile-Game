@@ -16,8 +16,8 @@ import {
   WIN_CONDITION_OPTIONS
 } from '../../../constants/configs/Games/RockPaperScissors';
 
-const getRandomColor = (): string => {
-  return COLOR_OPTIONS[Math.floor(Math.random() * COLOR_OPTIONS.length)].value;
+const getRandomColor = (): Record<string, any> => {
+  return COLOR_OPTIONS[Math.floor(Math.random() * COLOR_OPTIONS.length)];
 };
 const getRandomName = (): string => {
   return NAMES[Math.floor(Math.random() * NAMES.length)];
@@ -33,9 +33,11 @@ const RockPaperScissorsMenu = ({ setHasStartedGame }: RPSMenuProps) => {
 
   const [opponnent, setOpponent] = useState<Character>(() => {
     const { icon, index } = getRandomIcon();
+    const { value: color, shade } = getRandomColor();
     return {
       name: getRandomName(),
-      color: getRandomColor(),
+      color,
+      shade,
       icon,
       iconIndex: index
     };
@@ -50,7 +52,8 @@ const RockPaperScissorsMenu = ({ setHasStartedGame }: RPSMenuProps) => {
   const getNewColor = () => {
     const color = getRandomColor();
     const copy = { ...opponnent };
-    copy.color = color;
+    copy.color = color.value;
+    copy.shade = color.shade;
     setOpponent(copy);
   };
   const getNewName = () => {

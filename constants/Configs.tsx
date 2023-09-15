@@ -1,13 +1,13 @@
 import { Ghost, Mummy, Vampire, Zombie, PinDoll } from '../assets/svgs';
 
 export const COLOR_OPTIONS = [
-  { key: 'red', value: 'Red' },
-  { key: 'blue', value: 'Blue' },
-  { key: 'green', value: 'Green' },
-  { key: 'orange', value: 'Orange' },
-  { key: 'purple', value: 'Purple' },
-  { key: 'yellow', value: 'Yellow' },
-  { key: 'pink', value: 'Pink' }
+  { key: '#FF0000', value: 'Red', shade: 'rgba(255,0,0,.5)' },
+  { key: '#0000FF', value: 'Blue', shade: 'rgba(0,0,255,.5)' },
+  { key: '#008000', value: 'Green', shade: 'rgba(0,128,0,.5)' },
+  { key: '#FFA500', value: 'Orange', shade: 'rgba(255,165,0,.5)' },
+  { key: '#800080', value: 'Purple', shade: 'rgba(128,0,128,.5)' },
+  { key: '#FFFF00', value: 'Yellow', shade: 'rgba(255,255,0,.5)' },
+  { key: '#FFC0CB', value: 'Pink', shade: 'rgba(255,192,203,.5)' }
 ];
 
 export const ICONS = [

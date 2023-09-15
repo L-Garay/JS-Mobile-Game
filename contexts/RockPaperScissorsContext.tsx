@@ -11,14 +11,12 @@ import React, {
 } from 'react';
 
 export interface RPSContextProps {
-  currentGameConfig: RPSGameConfig | null;
-  setCurrentGameConfig: React.Dispatch<
-    React.SetStateAction<RPSGameConfig | null>
-  >;
+  currentGameConfig: RPSGameConfig;
+  setCurrentGameConfig: React.Dispatch<React.SetStateAction<RPSGameConfig>>;
 }
 
 export const RPSContext = createContext<RPSContextProps>({
-  currentGameConfig: null,
+  currentGameConfig: {} as RPSGameConfig,
   setCurrentGameConfig: () => {}
 });
 
@@ -27,8 +25,9 @@ export const RockPaperScissorsProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [currentGameConfig, setCurrentGameConfig] =
-    useState<RPSGameConfig | null>(null);
+  const [currentGameConfig, setCurrentGameConfig] = useState<RPSGameConfig>(
+    {} as RPSGameConfig
+  );
   const [currentScore, setCurrentScore] = useState<RPSScore | null>(null);
 
   useEffect(() => {
