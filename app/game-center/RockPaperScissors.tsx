@@ -41,7 +41,6 @@ export default function RockPaperScissors() {
 
   useEffect(() => {
     if (hasStartedGame) {
-      console.log('hasStartedGame', hasStartedGame);
       Animated.sequence([
         Animated.delay(500),
         Animated.parallel([
@@ -70,22 +69,19 @@ export default function RockPaperScissors() {
             toValue: 1,
             duration: 2000,
             useNativeDriver: false
+          }),
+          Animated.timing(heightGame, {
+            toValue: 100,
+            duration: 2000,
+            useNativeDriver: false
           })
-        ]),
-        // NOTE if you leave this outside of the .parallel(), it will produce the effect of pulling the game up (with 0 height) and then expanding it
-        // if you move it within the .parallel(), it will produce the effect of pulling the already expanded, game up
-        Animated.timing(heightGame, {
-          toValue: 100,
-          duration: 2000,
-          useNativeDriver: false
-        })
+        ])
       ]).start(() => {
         setShouldRemoveMenu(true);
         setShouldResetPage(false);
       });
     }
     if (shouldResetPage) {
-      console.log('shouldResetPage', shouldResetPage);
       Animated.parallel([
         Animated.timing(heightMenu, {
           toValue: 1,
